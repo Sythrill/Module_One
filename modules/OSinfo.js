@@ -19,4 +19,6 @@ function getOSinfo(){
     console.log('Home dir: ', userInfo.homedir);
 }
 
-exports.print = getOSinfo();
+module.exports = {
+    print: getOSinfo
+};
