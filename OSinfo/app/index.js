@@ -1,4 +1,4 @@
-var OSinfo = require("../modules/OSinfo");
+var OSinfo = require('../modules/OSinfo');
 
 process.stdin.setEncoding('utf-8');
 process.stdin.on('readable', function () {
@@ -7,7 +7,7 @@ process.stdin.on('readable', function () {
     console.log('/getOSinfo -- print info about your OS system');
     console.log('/exit -- close appilcation');
     var input = process.stdin.read();
-    if (!input)  return;
+    if (! input) return;
     var instruction = input.trim();
     switch (instruction) {
         case '/exit':
