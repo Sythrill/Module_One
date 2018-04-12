@@ -1,17 +1,29 @@
 var fs = require('fs');
 var formidable = require('formidable');
-var mv = require('mv');
+var path = require('path');
+
 
 exports.upload = function (request, response) {
     console.log('Rozpoczynam obsługę żądania upload.');
     var form = new formidable.IncomingForm();
     form.parse(request, function (error, fields, files) {
-        mv(files.upload.path, 'test.png', {mkdirp: true});
-        response.writeHead(200, {'Content-Type': 'text/html'});
-        response.write('recived image:<br/>');
-        response.write("<img src='/show' />");
-        response.end();
+        var oldpath = files.upload.path;
+        var filename = files.upload.name;
+        var newpath = 'C:/Pliki/' + filename;
+
+        fs.rename(oldpath, newpath, function(err) {
+            if (err) throw err;
+            var xxx = fs.readdirSync('C:/Pliki/' );
+            response.writeHead(200, {'Content-Type':'text/html'});
+            response.write('recived image:<br/>');
+            for (var i in xxx) {
+                response.write("<img src='/show' />");
+                response.end();
+            }
+
+        });
     });
+
 };
 
 exports.welcome = function (request, response) {
@@ -29,11 +41,22 @@ exports.error = function (request, response) {
     response.end();
 };
 
-exports.show = function (request, response) {
-    fs.readFile('test.png', 'binary', function(error, file) {
-        response.writeHead(200, {'Content-Type': 'image/png'});
-        response.write(file, 'binary');
-        response.end();
+exports.show = function(request, response) {
+    var files = fs.readdirSync('C:/Pliki');
+    files.forEach(function (element) {
+        var currentFile = 'C:/Pliki/' + element;
+        fs.readFile(currentFile, "binary", function(error, file) {
+            response.writeHead(200, {"Content-Type": "image/png"});
+            response.write(file, "binary");
+            response.end();
+        });
     });
 };
+
+
+
+
+
+
+
 
